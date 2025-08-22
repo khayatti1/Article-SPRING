@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Résultats de recherche</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .content {
+            flex: 1;
+        }
+        .results-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        .results-header {
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        footer {
+            margin-top: auto;
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-box-seam"></i> Gestion des Stocks
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/home}">
+                        <i class="bi bi-house"></i> Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/articles}">
+                        <i class="bi bi-list-ul"></i> Articles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/articles/search}">
+                        <i class="bi bi-search"></i> Recherche
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">
+                        <i class="bi bi-box-arrow-right"></i> Déconnexion
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="content">
+    <div class="container">
+        <div class="results-container">
+            <div class="results-header">
+                <h2 class="text-primary">
+                    <i class="bi bi-search"></i> Résultats de recherche
+                </h2>
+                <p class="text-muted">Articles correspondant à vos critères de recherche</p>
+            </div>
+
+            <div th:if="${#lists.isEmpty(articles)}" class="alert alert-danger text-center">
+                <i class="bi bi-exclamation-triangle"></i> Aucun article trouvé correspondant à votre recherche.
+            </div>
+
+            <div th:if="${!#lists.isEmpty(articles)}" class="table-responsive">
+                <table id="resultsTable" class="table table-striped table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th><i class="bi bi-hash"></i> ID</th>
+                        <th><i class="bi bi-card-text"></i> Description</th>
+                        <th><i class="bi bi-123"></i> Quantité</th>
+                        <th> Prix</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="a : ${articles}">
+                        <td th:text="${a.id}"></td>
+                        <td th:text="${a.description}"></td>
+                        <td th:text="${a.quantite}"></td>
+                        <td th:text="${ #numbers.formatDecimal(a.price, 1, 2) +' '+ 'DH'}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center mt-4">
+                <a th:href="@{/articles/search}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Nouvelle recherche
+                </a>
+                <a th:href="@{/articles}" class="btn btn-primary ms-2">
+                    <i class="bi bi-list-ul"></i> Voir tous les articles
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white py-4" style="height: 66px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>SYSTÈME DE GESTION DES STOCKS POUR UNE GESTION OPTIMALE DES ARTICLES </p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="mb-0">2025@khayatti-moudi</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#resultsTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json'
+            }
+        });
+    });
+</script>
+</body>
+</html>

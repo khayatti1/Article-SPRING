@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Accueil - Gestion des stocks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,5%), rgba(0,0,0,5%)),
+            url('/images/nn.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .content-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section .lead {
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .stats-section {
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            height: 100%;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4e9af1;
+        }
+
+        .stat-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: white;
+            margin: 0.5rem 0;
+        }
+
+        .stat-card p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        .action-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .action-card h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .action-card p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-action {
+            background-color: rgba(78, 154, 241, 0.8);
+            border: none;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-action:hover {
+            background-color: rgba(78, 154, 241, 1);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 1rem 0;
+            flex-shrink: 0;
+        }
+
+        .footer-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .content-overlay {
+                padding: 1rem;
+            }
+
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-section .lead {
+                font-size: 1.2rem;
+            }
+
+            .stat-card, .action-card {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="content-overlay">
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Bienvenue, <span th:text="${username}">g</span></h1>
+            <p class="lead">SYSTÈME DE GESTION DES ARTICLES EN STOCK</p>
+        </div>
+
+        <!-- Section Statistiques -->
+        <div class="stats-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <div class="stat-value" th:text="${totalArticles}">0</div>
+                        <p>Types d'articles en stock</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="bi bi-boxes"></i>
+                        </div>
+                        <div class="stat-value" th:text="${totalQuantity}">0</div>
+                        <p>Unités en stock</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="bi bi-currency-exchange"></i>
+                        </div>
+                        <div class="stat-value">
+                            <span th:text="${totalValue}">0</span> DH
+                        </div>
+                        <p>Valeur du stock</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Actions -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="action-card">
+                    <h3>Consulter les articles</h3>
+                    <p>Visualisez la liste complète des articles en stock.</p>
+                    <a th:href="@{/articles}" class="btn btn-action">
+                        <i class="bi bi-list-ul"></i> Voir les articles
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="action-card">
+                    <h3>Ajouter un article</h3>
+                    <p>Ajoutez de nouveaux articles à votre inventaire.</p>
+                    <a th:href="@{/articles/add}" class="btn btn-action">
+                        <i class="bi bi-plus-lg"></i> Ajouter
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="action-card">
+                    <h3>Rechercher</h3>
+                    <p>Chercher avancées dans votre inventaire.</p>
+                    <a th:href="@{/articles/search}" class="btn btn-action">
+                        <i class="bi bi-search"></i> Rechercher
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white py-4" style="height: 66px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>SYSTÈME DE GESTION DES STOCKS POUR UNE GESTION OPTIMALE DES ARTICLES </p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="mb-0">2025@khayatti-moudi</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

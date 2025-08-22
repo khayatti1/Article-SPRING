@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ajouter un article</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .content {
+            flex: 1;
+        }
+        .form-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        .form-header {
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .btn-submit {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-submit:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-box-seam"></i> Gestion des Stocks
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/home}">
+                        <i class="bi bi-house"></i> Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/articles}">
+                        <i class="bi bi-list-ul"></i> Articles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/articles/add}">
+                        <i class="bi bi-plus-circle"></i> Ajouter
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">
+                        <i class="bi bi-box-arrow-right"></i> Déconnexion
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="content">
+    <div class="container my-4">
+        <div class="form-container">
+            <div class="form-header">
+                <h2 class="text-primary">
+                    <i class="bi bi-plus-lg"></i> Ajouter un nouvel article
+                </h2>
+                <p class="text-muted">Remplissez le formulaire pour ajouter un nouvel article à l'inventaire</p>
+            </div>
+
+            <div th:if="${message}" class="alert alert-info alert-dismissible fade show">
+                <p th:text="${message}" class="mb-0"></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <form th:action="@{/articles/add}" th:object="${article}" method="post" id="articleForm">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label for="description" class="form-label">
+                            <i class="bi bi-card-text"></i> Description
+                        </label>
+                        <input type="text" class="form-control" id="description" th:field="*{description}"
+                               placeholder="Entrez la description de l'article" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="quantite" class="form-label">
+                            <i class="bi bi-123"></i> Quantité
+                        </label>
+                        <input type="number" class="form-control" id="quantite" th:field="*{quantite}"
+                               placeholder="Quantité en stock" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="price" class="form-label">
+                            Prix unitaire
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">DH</span>
+                            <input type="number" class="form-control" id="price" th:field="*{price}"
+                                   placeholder="Prix unitaire" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a th:href="@{/articles}" class="btn btn-secondary me-md-2">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                    <button type="submit" class="btn btn-submit">
+                        <i class="bi bi-check-circle"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white py-4" style="height: 66px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>SYSTÈME DE GESTION DES STOCKS POUR UNE GESTION OPTIMALE DES ARTICLES</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="mb-0">2025@khayatti-moudi</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('articleForm').onsubmit = function(event) {
+        var quantite = document.getElementById('quantite').value;
+        if (quantite < 0) {
+            quantite = Math.abs(quantite);
+            document.getElementById('quantite').value = quantite;
+            alert("La quantité négative a été convertie en positive : " + quantite);
+        }
+        return true; // Toujours soumettre le formulaire
+    }
+    document.getElementById('articleForm').onsubmit = function(event) {
+        var quantite = document.getElementById('quantite').value;
+        if (quantite < 0) {
+            quantite = Math.abs(quantite);
+            document.getElementById('quantite').value = quantite;
+            alert("La quantité négative a été convertie en positive : " + quantite);
+        }
+
+        if (!confirm("Voulez-vous vraiment ajouter cet article ?")) {
+            event.preventDefault();
+        }
+    }
+
+</script>
+</body>
+</html>
